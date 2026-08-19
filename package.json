@@ -1,0 +1,28 @@
+{
+  "name": "site-santuario",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "sync:demo": "tsx scripts/sync-demo.ts",
+    "sync:google": "tsx scripts/sync-google-docs.ts"
+  },
+  "dependencies": {
+    "@google-cloud/local-auth": "^3.0.1",
+    "@astrojs/check": "^0.9.4",
+    "astro": "^5.14.1",
+    "dotenv": "^16.6.1",
+    "googleapis": "^148.0.0",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "tsx": "^4.19.2"
+  }
+}

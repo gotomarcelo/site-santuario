@@ -1,0 +1,21 @@
+:root { color: #18231d; background: #f7f8f3; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main, footer { max-width: 1120px; margin: auto; padding-inline: 24px; }
+.hero { min-height: 590px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 64px; }
+.eyebrow { color: #52705c; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: .75rem; }
+h1 { font-size: clamp(3rem, 7vw, 5.5rem); line-height: .95; letter-spacing: -.07em; margin: 0; }
+h2 { font-size: clamp(2rem, 4vw, 3.5rem); letter-spacing: -.05em; }
+.lead { max-width: 36rem; font-size: 1.2rem; line-height: 1.6; }
+.button { display: inline-block; background: #1e5134; color: white; padding: 14px 20px; border-radius: 99px; text-decoration: none; font-weight: 700; }
+.hero__image { width: 100%; min-height: 400px; object-fit: cover; border-radius: 28px; }
+.section { padding-block: 72px; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.card { color: inherit; text-decoration: none; border: 1px solid #dbe1d5; padding: 24px; border-radius: 16px; background: white; }
+.card:hover { border-color: #1e5134; transform: translateY(-2px); }
+.faq { max-width: 800px; }
+details { padding: 18px 0; border-bottom: 1px solid #cfd8cf; }
+summary { cursor: pointer; font-weight: 700; }
+details p { line-height: 1.6; }
+footer { padding-block: 36px 60px; color: #52705c; font-size: .9rem; }
+@media (max-width: 700px) { .hero, .cards { grid-template-columns: 1fr; } .hero { padding-block: 72px; gap: 36px; } }

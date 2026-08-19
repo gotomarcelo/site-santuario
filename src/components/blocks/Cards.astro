@@ -1,0 +1,17 @@
+---
+import type { CardsBlock } from '../../lib/types';
+
+const { title, items } = Astro.props as CardsBlock;
+---
+
+<section id="como-funciona" class="section">
+  <h2>{title}</h2>
+  <div class="cards">
+    {items.map((item) => (
+      <a class="card" href={item.href}>
+        <h3>{item.title}</h3>
+        <p>{item.description}</p>
+      </a>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,15 @@
+---
+import type { FaqBlock } from '../../lib/types';
+
+const { title, items } = Astro.props as FaqBlock;
+---
+
+<section class="section faq">
+  <h2>{title}</h2>
+  {items.map((item) => (
+    <details>
+      <summary>{item.question}</summary>
+      <p>{item.answer}</p>
+    </details>
+  ))}
+</section>

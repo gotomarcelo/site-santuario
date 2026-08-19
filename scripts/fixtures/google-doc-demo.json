@@ -1,0 +1,60 @@
+{
+  "title": "Drive CMS — POC",
+  "body": {
+    "content": [
+      {
+        "table": {
+          "tableRows": [
+            { "tableCells": [{ "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "hero\n" } }] } }] }] },
+            { "tableCells": [
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Edite seu site em um documento\n" } }] } }] },
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Esta página foi gerada a partir de uma estrutura de tabelas compatível com o Google Docs.\n" } }] } }] },
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=1200&q=80\n" } }] } }] },
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Ver como funciona\n" } }] } }] },
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "#como-funciona\n" } }] } }] }
+            ] }
+          ]
+        }
+      },
+      {
+        "table": {
+          "tableRows": [
+            { "tableCells": [{ "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "cards\n" } }] } }] }] },
+            { "tableCells": [{ "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "O fluxo do MVP\n" } }] } }] }] },
+            { "tableCells": [
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Escreva\n" } }] } }] },
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "O cliente preenche tabelas no Google Docs.\n" } }] } }] },
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "#escreva\n" } }] } }] }
+            ] },
+            { "tableCells": [
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Converta\n" } }] } }] },
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Um script interpreta cada tabela como um block.\n" } }] } }] },
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "#converta\n" } }] } }] }
+            ] },
+            { "tableCells": [
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Publique\n" } }] } }] },
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Astro gera HTML rápido para CDN.\n" } }] } }] },
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "#publique\n" } }] } }] }
+            ] }
+          ]
+        }
+      },
+      {
+        "table": {
+          "tableRows": [
+            { "tableCells": [{ "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "faq\n" } }] } }] }] },
+            { "tableCells": [{ "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Perguntas frequentes\n" } }] } }] }] },
+            { "tableCells": [
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Preciso de WordPress?\n" } }] } }] },
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Não. Nesta POC o conteúdo é convertido em arquivos HTML estáticos.\n" } }] } }] }
+            ] },
+            { "tableCells": [
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Já funciona com Google Docs?\n" } }] } }] },
+              { "content": [{ "paragraph": { "elements": [{ "textRun": { "content": "Sim. O comando sync:google está preparado; basta configurar a chave e o ID do documento.\n" } }] } }] }
+            ] }
+          ]
+        }
+      }
+    ]
+  }
+}
