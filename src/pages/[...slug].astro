@@ -1,0 +1,23 @@
+---
+import PageLayout from '../components/PageLayout.astro';
+import type { Page } from '../lib/types';
+
+export function getStaticPaths() {
+  const pageModules = import.meta.glob('../content/pages/**/index.json', { eager: true });
+  return Object.entries(pageModules)
+    .map(([file, module]) => {
+      const relative = file.replace('../content/pages/', '');
+      const route = relative === 'index.json' ? '' : relative.replace(/\/index\.json$/, '');
+      const page = (module as { default: Page }).default;
+      return {
+        params: { slug: route },
+        props: { page },
+      };
+    })
+    .filter(({ params }) => params.slug !== '');
+}
+
+const { page } = Astro.props as { page: Page };
+---
+
+<PageLayout page={page} />

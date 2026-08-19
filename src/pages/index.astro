@@ -1,34 +1,8 @@
 ---
-import Cards from '../components/blocks/Cards.astro';
-import Faq from '../components/blocks/Faq.astro';
-import Hero from '../components/blocks/Hero.astro';
-import page from '../content/home.json';
-import type { Block, Page } from '../lib/types';
-import '../styles/global.css';
+import PageLayout from '../components/PageLayout.astro';
+import page from '../content/pages/index.json';
+import type { Page } from '../lib/types';
 
 const content = page as Page;
-const componentFor = {
-  hero: Hero,
-  cards: Cards,
-  faq: Faq,
-} as const;
 ---
-
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={content.description} />
-    <title>{content.title}</title>
-  </head>
-  <body>
-    <main>
-      {content.blocks.map((block) => {
-        const Component = componentFor[block.type];
-        return <Component {...block} />;
-      })}
-    </main>
-    <footer>Drive CMS POC · conteúdo estruturado, HTML estático.</footer>
-  </body>
-</html>
+<PageLayout page={content} />
