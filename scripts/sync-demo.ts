@@ -1,14 +1,59 @@
-import { readFile } from 'node:fs/promises';
-import { parseGoogleDocument } from './google-doc-parser';
-import { writePages } from './content-writer';
+import { readFile } from "node:fs/promises";
+import { parseGoogleDocument, type GoogleDocument } from "./google-doc-parser";
+import { writeFragments, writePages } from "./content-writer";
 
-const fixtureUrl = new URL('./fixtures/google-doc-demo.json', import.meta.url);
-const aboutFixtureUrl = new URL('./fixtures/google-doc-quem-somos.json', import.meta.url);
-const document = JSON.parse(await readFile(fixtureUrl, 'utf8'));
-const aboutDocument = JSON.parse(await readFile(aboutFixtureUrl, 'utf8'));
+const fixtureUrl = new URL("./fixtures/google-doc-demo.json", import.meta.url);
+const headerFixtureUrl = new URL(
+  "./fixtures/google-doc-header.json",
+  import.meta.url,
+);
+const document = JSON.parse(await readFile(fixtureUrl, "utf8"));
+const headerDocument = JSON.parse(await readFile(headerFixtureUrl, "utf8"));
+
+const fragmentReference = (source: GoogleDocument): GoogleDocument => ({
+  ...source,
+  body: {
+    content: [
+      {
+        table: {
+          tableRows: [
+            {
+              tableCells: [
+                {
+                  content: [
+                    {
+                      paragraph: {
+                        elements: [{ textRun: { content: "fragment\n" } }],
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              tableCells: [
+                {
+                  content: [
+                    {
+                      paragraph: {
+                        elements: [{ textRun: { content: "header\n" } }],
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ],
+  },
+});
 
 await writePages([
-	{ path: [], page: parseGoogleDocument(document) },
-	{ path: ['quem-somos'], page: parseGoogleDocument(aboutDocument) },
+  { path: [], page: parseGoogleDocument(fragmentReference(document)) },
 ]);
-console.log('Conteúdo de demonstração sincronizado em src/content/pages/.');
+await writeFragments([
+  { path: ["header"], page: parseGoogleDocument(headerDocument) },
+]);
+console.log("Conteúdo de demonstração sincronizado em src/content/pages/.");

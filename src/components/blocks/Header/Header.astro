@@ -1,0 +1,53 @@
+---
+import type { HeaderBlock } from "../../../lib/types";
+import "./Header.scss";
+
+const { eyebrow, brand, cta, links } = Astro.props as HeaderBlock;
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-header__brand" href="/" aria-label={brand}>
+      <span class="site-header__mark" aria-hidden="true">+</span>
+      <span class="site-header__name">
+        <span class="site-header__eyebrow">{eyebrow}</span>
+        <span class="site-header__title">{brand}</span>
+      </span>
+    </a>
+    <nav class="site-header__nav" aria-label="Navegação principal">
+      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+    </nav>
+    <div class="site-header__actions">
+      <a class="site-header__cta" href={cta.href}>{cta.label}</a>
+      <button
+        class="site-header__toggle"
+        type="button"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+      >
+        <span class="site-header__hamburger" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+  <nav class="site-header__mobile-nav" aria-label="Navegação mobile" hidden>
+    {links.map((link) => <a href={link.href}>{link.label}</a>)}
+    <a class="site-header__mobile-cta" href={cta.href}>{cta.label}</a>
+  </nav>
+</header>
+
+<script>
+  document.querySelectorAll(".site-header").forEach((header) => {
+    const toggle = header.querySelector<HTMLButtonElement>(
+      ".site-header__toggle",
+    );
+    const menu = header.querySelector<HTMLElement>(".site-header__mobile-nav");
+    if (!toggle || !menu) return;
+    toggle.addEventListener("click", () => {
+      const isOpen = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!isOpen));
+      toggle.setAttribute("aria-label", isOpen ? "Abrir menu" : "Fechar menu");
+      menu.hidden = isOpen;
+      header.classList.toggle("site-header--open", !isOpen);
+    });
+  });
+</script>

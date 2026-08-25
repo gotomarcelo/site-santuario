@@ -1,0 +1,13 @@
+@use "tokens" as *;
+
+@mixin content-width($width: 1120px) {
+  max-width: $width;
+  margin-inline: auto;
+  padding-inline: $space-5;
+}
+
+@mixin below($breakpoint) {
+  @media (max-width: $breakpoint) {
+    @content;
+  }
+}

@@ -3,7 +3,7 @@ import { authenticate } from '@google-cloud/local-auth';
 import 'dotenv/config';
 import { google } from 'googleapis';
 import { parseGoogleDocument } from './google-doc-parser';
-import { writePages } from './content-writer';
+import { writeFragments, writePages } from './content-writer';
 
 const documentId = process.env.GOOGLE_DOCUMENT_ID;
 const rootFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
@@ -55,7 +55,7 @@ async function childrenOf(folderId: string) {
 async function pagesInFolder(folderId: string, path: string[] = []) {
   const children = await childrenOf(folderId);
   const documents = children.filter((file) => file.mimeType === 'application/vnd.google-apps.document');
-  const folders = children.filter((file) => file.mimeType === 'application/vnd.google-apps.folder');
+  const folders = children.filter((file) => file.mimeType === 'application/vnd.google-apps.folder' && !(path.length === 0 && slugify(file.name ?? '') === 'fragmentos'));
 
   if (documents.length > 1) {
     throw new Error(`A pasta ${path.join('/') || '(raiz)'} precisa ter no máximo um Google Doc.`);
@@ -79,9 +79,40 @@ async function pagesInFolder(folderId: string, path: string[] = []) {
   return pages;
 }
 
-const pages = rootFolderId
-  ? await pagesInFolder(rootFolderId)
-  : [{ path: [], page: await pageFromDocument(documentId!) }];
+async function fragmentsInFolder(folderId: string, path: string[] = []) {
+  const children = await childrenOf(folderId);
+  const documents = children.filter((file) => file.mimeType === 'application/vnd.google-apps.document');
+  const folders = children.filter((file) => file.mimeType === 'application/vnd.google-apps.folder');
+  if (documents.length > 1) throw new Error(`O fragmento ${path.join('/')} possui mais de um documento.`);
+
+  const documentSlug = slugify(documents[0]?.name ?? '');
+  const fragmentPath = path.length ? path : [documentSlug];
+  const fragments = documents.length
+    ? [{ path: fragmentPath, page: await pageFromDocument(documents[0].id!) }]
+    : [];
+  if (documents.length && !slugify(documents[0].name ?? '')) {
+    throw new Error(`O documento de fragmento dentro de ${path.join('/') || 'fragmentos'} precisa ter um nome válido.`);
+  }
+  for (const folder of folders) {
+    const slug = slugify(folder.name ?? '');
+    if (!slug) throw new Error(`O fragmento ${folder.name || '(sem nome)'} não pode virar uma referência válida.`);
+    fragments.push(...await fragmentsInFolder(folder.id!, [...path, slug]));
+  }
+  return fragments;
+}
+
+let pages;
+let fragments: Array<{ path: string[]; page: Awaited<ReturnType<typeof pageFromDocument>> }> = [];
+if (rootFolderId) {
+  const rootChildren = await childrenOf(rootFolderId);
+  const fragmentFolder = rootChildren.find((file) => file.mimeType === 'application/vnd.google-apps.folder' && slugify(file.name ?? '') === 'fragmentos');
+  pages = await pagesInFolder(rootFolderId);
+  if (fragmentFolder?.id) fragments = await fragmentsInFolder(fragmentFolder.id);
+} else {
+  pages = [{ path: [], page: await pageFromDocument(documentId!) }];
+}
 
 await writePages(pages);
+await writeFragments(fragments);
 console.log(`${pages.length} página(s) sincronizada(s) em src/content/pages/.`);
+console.log(`${fragments.length} fragmento(s) sincronizado(s) em src/content/fragments/.`);

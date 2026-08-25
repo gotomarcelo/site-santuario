@@ -10,7 +10,7 @@ npm run sync:demo
 npm run dev
 ```
 
-Abra `http://localhost:4321` ou `http://localhost:4321/quem-somos/`. Ao editar as fixtures e rodar `npm run sync:demo`, o conteúdo em `src/content/pages/` é regenerado. O build de produção é validado com:
+Abra `http://localhost:4321`. Ao editar as fixtures e rodar `npm run sync:demo`, o conteúdo em `src/content/pages/` é regenerado. O build de produção é validado com:
 
 ```bash
 npm run build
@@ -20,27 +20,58 @@ npm run build
 
 Cada tabela representa um block. A primeira linha contém apenas seu identificador; as demais linhas são os dados.
 
-### Hero
+## Organização dos componentes
 
-| hero | | | | |
-| --- | --- | --- | --- | --- |
-| título | descrição | URL da imagem | texto do CTA | URL do CTA |
+Cada componente Astro fica em uma pasta própria, com o markup e o estilo separados em Sass:
 
-### Cards
+```text
+src/components/blocks/
+└── Header/
+	├── Header.astro
+	└── Header.scss
+```
 
-| cards | | |
-| --- | --- | --- |
-| título da seção | | |
-| título do card | descrição | URL |
+O arquivo `.astro` concentra props, HTML e comportamento do componente. O arquivo `.scss` concentra seus estilos e importa os tokens compartilhados:
 
-### FAQ
+```scss
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+```
 
-| faq | |
+Os tokens ficam em `src/styles/_tokens.scss` e incluem cores, tipografia, espaçamento, raios e breakpoints (`$breakpoint-mobile`, `$breakpoint-tablet` e `$breakpoint-header`). Os mixins compartilhados ficam em `src/styles/_mixins.scss`. Para criar um novo block, siga esse padrão e registre o componente em `BlockRenderer.astro` e `FragmentRenderer.astro`.
+
+### Header
+
+O header é um block que pode ser usado diretamente em uma página ou dentro de um fragmento `header`. A primeira linha de dados define o texto pequeno da marca, o nome da marca, o CTA e sua URL. As linhas seguintes definem os links do menu:
+
+| header | | | |
+| --- | --- | --- | --- |
+| Santuário | Nossa Senhora de Nazaré | Contribuir | #dizimo |
+| Início | / |
+| A Paróquia | /a-paroquia/ |
+| Missas | /missas/ |
+
+O menu desktop aparece em telas largas e o menu mobile é aberto pelo botão no canto direito. Os links e o CTA são definidos no Google Docs; o comportamento responsivo pertence ao componente Astro.
+
+### Fragmentos reutilizáveis
+
+Crie uma pasta `fragmentos` dentro da pasta raiz do Drive. Dentro dela, crie uma pasta para cada fragmento, como `header` e `footer`, e coloque o documento correspondente dentro da pasta. Por exemplo:
+
+```text
+fragmentos/
+└── header/
+	└── header (Google Docs)
+```
+
+Essa estrutura gera `src/content/fragments/header/index.json`. O documento usa o mesmo contrato de blocks das páginas. O sincronizador também aceita documentos diretamente dentro de `fragmentos`, usando o nome do documento como nome do fragmento.
+
+Na página que deve usar um fragmento, adicione uma tabela cuja primeira linha seja `fragment` e cuja primeira célula da segunda linha contenha o nome do fragmento:
+
+| fragment | |
 | --- | --- |
-| título da seção | |
-| pergunta | resposta |
+| header | |
 
-No Google Docs, crie a tabela com o número máximo de colunas necessário e mescle as células vazias da primeira linha, se quiser uma apresentação mais limpa. O parser ignora células vazias na primeira linha.
+A referência usa o caminho do documento dentro de `fragmentos`, sem a extensão do arquivo. Para documentos diretamente dentro da pasta, use apenas o nome, como `header`. A referência pode aparecer em qualquer posição e o mesmo fragmento pode ser usado em várias páginas.
 
 ## Conectar a um Google Doc real
 

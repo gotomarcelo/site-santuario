@@ -14,8 +14,8 @@
     "sync:google": "tsx scripts/sync-google-docs.ts"
   },
   "dependencies": {
-    "@google-cloud/local-auth": "^3.0.1",
     "@astrojs/check": "^0.9.4",
+    "@google-cloud/local-auth": "^3.0.1",
     "astro": "^5.14.1",
     "dotenv": "^16.6.1",
     "googleapis": "^148.0.0",
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.2.0",
+    "sass": "^1.103.1",
     "tsx": "^4.19.2"
   }
 }

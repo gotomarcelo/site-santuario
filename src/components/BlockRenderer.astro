@@ -1,0 +1,35 @@
+---
+import Header from "./blocks/Header/Header.astro";
+import FragmentRenderer from "./FragmentRenderer.astro";
+import type { Block, Page } from "../lib/types";
+
+const fragmentModules = import.meta.glob("../content/fragments/**/index.json", {
+  eager: true,
+});
+const { block } = Astro.props as { block: Block };
+const componentFor = { header: Header } as const;
+
+function fragmentFor(name: string): Page | undefined {
+  const key = `../content/fragments/${name}/index.json`;
+  return (fragmentModules[key] as { default: Page } | undefined)?.default;
+}
+
+const fragment =
+  block.type === "fragment" ? fragmentFor(block.name) : undefined;
+if (block.type === "fragment" && !fragment) {
+  throw new Error(
+    `Fragmento "${block.name}" não foi encontrado em src/content/fragments/.`,
+  );
+}
+---
+
+{
+  block.type === "fragment" ? (
+    <FragmentRenderer blocks={fragment?.blocks ?? []} />
+  ) : (
+    (() => {
+      const Component = componentFor[block.type];
+      return <Component {...block} />;
+    })()
+  )
+}

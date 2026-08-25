@@ -1,0 +1,37 @@
+@use "tokens" as *;
+@use "mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  color: $color-ink;
+  background: $color-paper;
+  font-family: $font-sans;
+}
+
+body {
+  margin: 0;
+  padding-top: 80px;
+}
+
+main,
+footer {
+  @include content-width;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  letter-spacing: -0.05em;
+}
+
+.section {
+  padding-block: $space-8;
+}
+
+footer {
+  padding-block: $space-6 $space-7;
+  color: $color-primary-muted;
+  font-size: 0.9rem;
+}

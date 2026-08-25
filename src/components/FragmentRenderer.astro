@@ -1,0 +1,22 @@
+---
+import Header from "./blocks/Header/Header.astro";
+import type { Block } from "../lib/types";
+
+const { blocks } = Astro.props as { blocks: Block[] };
+const componentFor = { header: Header } as const;
+
+if (blocks.some((block) => block.type === "fragment")) {
+  throw new Error("Fragmentos não podem referenciar outros fragmentos.");
+}
+
+const renderableBlocks = blocks.filter(
+  (block) => block.type !== "fragment",
+) as Exclude<Block, { type: "fragment" }>[];
+---
+
+{
+  renderableBlocks.map((block) => {
+    const Component = componentFor[block.type];
+    return <Component {...block} />;
+  })
+}

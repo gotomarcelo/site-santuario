@@ -1,26 +1,19 @@
 export type Cta = { label: string; href: string };
 
-export type HeroBlock = {
-  type: 'hero';
-  title: string;
-  description: string;
-  image: string;
+export type FragmentBlock = {
+  type: "fragment";
+  name: string;
+};
+
+export type HeaderBlock = {
+  type: "header";
+  eyebrow: string;
+  brand: string;
   cta: Cta;
+  links: Array<{ label: string; href: string }>;
 };
 
-export type CardsBlock = {
-  type: 'cards';
-  title: string;
-  items: Array<{ title: string; description: string; href: string }>;
-};
-
-export type FaqBlock = {
-  type: 'faq';
-  title: string;
-  items: Array<{ question: string; answer: string }>;
-};
-
-export type Block = HeroBlock | CardsBlock | FaqBlock;
+export type Block = FragmentBlock | HeaderBlock;
 
 export type Page = {
   title: string;

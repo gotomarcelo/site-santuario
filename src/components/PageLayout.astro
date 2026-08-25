@@ -1,12 +1,9 @@
 ---
-import Cards from './blocks/Cards.astro';
-import Faq from './blocks/Faq.astro';
-import Hero from './blocks/Hero.astro';
-import type { Page } from '../lib/types';
-import '../styles/global.css';
+import BlockRenderer from "./BlockRenderer.astro";
+import type { Page } from "../lib/types";
+import "../styles/global.scss";
 
 const { page } = Astro.props as { page: Page };
-const componentFor = { hero: Hero, cards: Cards, faq: Faq } as const;
 ---
 
 <!doctype html>
@@ -19,11 +16,7 @@ const componentFor = { hero: Hero, cards: Cards, faq: Faq } as const;
   </head>
   <body>
     <main>
-      {page.blocks.map((block) => {
-        const Component = componentFor[block.type];
-        return <Component {...block} />;
-      })}
+      {page.blocks.map((block) => <BlockRenderer block={block} />)}
     </main>
-    <footer>Drive CMS POC · conteúdo estruturado, HTML estático.</footer>
   </body>
 </html>

@@ -1,12 +1,14 @@
-import type { Block, Page } from '../src/lib/types';
+import type { Block, Page } from "../src/lib/types";
 
-type GoogleDocument = {
+export type GoogleDocument = {
   title?: string | null;
   body?: { content?: StructuralElement[] | null } | null;
 };
 
-type StructuralElement = {
-  paragraph?: { elements?: Array<{ textRun?: { content?: string | null } | null }> | null } | null;
+export type StructuralElement = {
+  paragraph?: {
+    elements?: Array<{ textRun?: { content?: string | null } | null }> | null;
+  } | null;
   table?: {
     tableRows?: Array<{
       tableCells?: Array<{ content?: StructuralElement[] | null }> | null;
@@ -14,17 +16,20 @@ type StructuralElement = {
   } | null;
 };
 
-const clean = (value = '') => value.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+const clean = (value = "") =>
+  value.replace(/\n/g, " ").replace(/\s+/g, " ").trim();
 
-function textFromContent(content: StructuralElement[] | null | undefined): string {
+function textFromContent(
+  content: StructuralElement[] | null | undefined,
+): string {
   return (content ?? [])
     .map((element) => {
-      if (!element.paragraph) return '';
+      if (!element.paragraph) return "";
       return (element.paragraph.elements ?? [])
-        .map((part) => part.textRun?.content ?? '')
-        .join('');
+        .map((part) => part.textRun?.content ?? "")
+        .join("");
     })
-    .join(' ');
+    .join(" ");
 }
 
 function rowsFromTable(element: StructuralElement): string[][] {
@@ -34,39 +39,44 @@ function rowsFromTable(element: StructuralElement): string[][] {
 }
 
 function firstValue(row: string[] | undefined): string {
-  return row?.find(Boolean) ?? '';
+  return row?.find(Boolean) ?? "";
 }
 
 function blockFromRows(rows: string[][]): Block | null {
   const blockName = firstValue(rows[0]).toLowerCase();
   const body = rows.slice(1).filter((row) => row.some(Boolean));
 
-  if (blockName === 'hero') {
-    const [title = '', description = '', image = '', label = '', href = '#'] = body[0] ?? [];
-    if (!title) throw new Error('O block hero precisa de uma linha com título, descrição, imagem, CTA e URL.');
-    return { type: 'hero', title, description, image, cta: { label, href } };
+  if (blockName === "header") {
+    const [eyebrow = "", brand = "", ctaLabel = "", ctaHref = "#"] =
+      body[0] ?? [];
+    const links = body
+      .slice(1)
+      .map(([label = "", href = "#"]) => ({ label, href }))
+      .filter((link) => link.label);
+    if (!brand)
+      throw new Error("O block header precisa informar o nome da marca.");
+    return {
+      type: "header",
+      eyebrow,
+      brand,
+      cta: { label: ctaLabel, href: ctaHref },
+      links,
+    };
   }
 
-  if (blockName === 'cards') {
-    const title = firstValue(body[0]);
-    const items = body.slice(1).map(([itemTitle = '', description = '', href = '#']) => ({
-      title: itemTitle,
-      description,
-      href,
-    })).filter((item) => item.title);
-    if (!title || !items.length) throw new Error('O block cards precisa de título e pelo menos um card.');
-    return { type: 'cards', title, items };
+  if (blockName === "fragment" || blockName === "experience-fragment") {
+    const name = firstValue(body[0]);
+    if (!name)
+      throw new Error(
+        "A referência de fragmento precisa informar o nome do fragmento.",
+      );
+    return { type: "fragment", name };
   }
 
-  if (blockName === 'faq') {
-    const title = firstValue(body[0]);
-    const items = body.slice(1).map(([question = '', answer = '']) => ({ question, answer }))
-      .filter((item) => item.question && item.answer);
-    if (!title || !items.length) throw new Error('O block faq precisa de título e pelo menos uma pergunta/resposta.');
-    return { type: 'faq', title, items };
-  }
-
-  if (blockName) console.warn(`Block "${blockName}" ignorado: ele não está cadastrado no parser.`);
+  if (blockName)
+    console.warn(
+      `Block "${blockName}" ignorado: ele não está cadastrado no parser.`,
+    );
   return null;
 }
 
@@ -82,13 +92,13 @@ export function parseGoogleDocument(document: GoogleDocument): Page {
     const paragraphs = content.filter((element) => element.paragraph).length;
     throw new Error(
       `Nenhum block válido foi encontrado. A API recebeu ${tables.length} tabela(s) e ${paragraphs} parágrafo(s). ` +
-      'Cada block precisa ser uma tabela do Google Docs cuja primeira linha tenha o nome do block: hero, cards ou faq.',
+        "Cada block precisa ser uma tabela do Google Docs cuja primeira linha tenha o nome do block: header ou fragment.",
     );
   }
 
   return {
-    title: document.title || 'Site sem título',
-    description: 'Página gerada automaticamente a partir de um Google Doc.',
+    title: document.title || "Site sem título",
+    description: "Página gerada automaticamente a partir de um Google Doc.",
     blocks,
   };
 }
