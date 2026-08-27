@@ -1,5 +1,7 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  output: 'static',
+  output: "static",
+  site: "https://gotomarcelo.github.io",
+  base: "/site-santuario",
 });

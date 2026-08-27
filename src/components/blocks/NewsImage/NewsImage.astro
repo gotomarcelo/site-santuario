@@ -1,11 +1,12 @@
 ---
 import type { NewsImageBlock } from "../../../lib/types";
+import { siteUrl } from "../../../lib/urls";
 import "./NewsImage.scss";
 
 const { image, title, imageAlt } = Astro.props as NewsImageBlock;
 ---
 
 <figure class="news-image">
-  <img src={image} alt={imageAlt} />
+  <img src={siteUrl(image)} alt={imageAlt} />
   {title && <figcaption>{title}</figcaption>}
 </figure>

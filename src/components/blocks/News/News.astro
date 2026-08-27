@@ -1,6 +1,7 @@
 ---
 import type { NewsItem, NewsListingBlock } from "../../../lib/types";
 import { summarizeNews } from "../../../lib/news";
+import { siteUrl } from "../../../lib/urls";
 import NewsCard from "../NewsCard/NewsCard.astro";
 import "./News.scss";
 
@@ -30,9 +31,10 @@ const news = Object.values(modules)
         )
       }
     </div>
-    <a class="news-preview__all" href={block.allHref}
-      >{block.allLabel} <span aria-hidden="true">→</span></a
-    >
+    <a class="news-preview__all" href={siteUrl(block.allHref)}>
+      {block.allLabel}
+      <span aria-hidden="true">→</span>
+    </a>
   </div>
   <div class="news-preview__grid">
     {news.map((item) => <NewsCard news={item} />)}

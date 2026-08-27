@@ -1,5 +1,6 @@
 ---
 import type { HeaderBlock } from "../../../lib/types";
+import { siteUrl } from "../../../lib/urls";
 import "./Header.scss";
 
 const { logo, eyebrow, brand, cta, links } = Astro.props as HeaderBlock;
@@ -7,10 +8,10 @@ const { logo, eyebrow, brand, cta, links } = Astro.props as HeaderBlock;
 
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="site-header__brand" href="/" aria-label={brand}>
+    <a class="site-header__brand" href={siteUrl("/")} aria-label={brand}>
       {
         logo ? (
-          <img class="site-header__logo" src={logo} alt="" />
+          <img class="site-header__logo" src={siteUrl(logo)} alt="" />
         ) : (
           <span class="site-header__mark" aria-hidden="true">
             <span />
@@ -23,10 +24,10 @@ const { logo, eyebrow, brand, cta, links } = Astro.props as HeaderBlock;
       </span>
     </a>
     <nav class="site-header__nav" aria-label="Navegação principal">
-      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+      {links.map((link) => <a href={siteUrl(link.href)}>{link.label}</a>)}
     </nav>
     <div class="site-header__actions">
-      <a class="site-header__cta" href={cta.href}>{cta.label}</a>
+      <a class="site-header__cta" href={siteUrl(cta.href)}>{cta.label}</a>
       <button
         class="site-header__toggle"
         type="button"
@@ -38,8 +39,8 @@ const { logo, eyebrow, brand, cta, links } = Astro.props as HeaderBlock;
     </div>
   </div>
   <nav class="site-header__mobile-nav" aria-label="Navegação mobile" hidden>
-    {links.map((link) => <a href={link.href}>{link.label}</a>)}
-    <a class="site-header__mobile-cta" href={cta.href}>{cta.label}</a>
+    {links.map((link) => <a href={siteUrl(link.href)}>{link.label}</a>)}
+    <a class="site-header__mobile-cta" href={siteUrl(cta.href)}>{cta.label}</a>
   </nav>
 </header>
 

@@ -1,5 +1,6 @@
 ---
 import type { FooterBlock } from "../../../lib/types";
+import { siteUrl } from "../../../lib/urls";
 import "./Footer.scss";
 
 const {
@@ -22,10 +23,14 @@ const {
   <div class="site-footer__main">
     <div class="site-footer__grid">
       <section class="site-footer__brand">
-        <a class="site-footer__brand-lockup" href="/" aria-label={brand}>
+        <a
+          class="site-footer__brand-lockup"
+          href={siteUrl("/")}
+          aria-label={brand}
+        >
           {
             logo ? (
-              <img class="site-footer__logo" src={logo} alt="" />
+              <img class="site-footer__logo" src={siteUrl(logo)} alt="" />
             ) : (
               <span class="site-footer__mark" aria-hidden="true">
                 <span />
@@ -54,7 +59,7 @@ const {
           {
             quickLinks.map((link) => (
               <li>
-                <a href={link.href}>{link.label}</a>
+                <a href={siteUrl(link.href)}>{link.label}</a>
               </li>
             ))
           }

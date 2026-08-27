@@ -1,14 +1,15 @@
 ---
 import type { NewsSummary } from "../../../lib/news";
 import { formatNewsDate } from "../../../lib/news";
+import { siteUrl } from "../../../lib/urls";
 import "./NewsCard.scss";
 
 const { news } = Astro.props as { news: NewsSummary };
 ---
 
 <article class="news-card">
-  <a class="news-card__image-link" href={`/noticias/${news.slug}/`}>
-    <img src={news.image} alt={news.imageAlt} loading="lazy" />
+  <a class="news-card__image-link" href={siteUrl(`/noticias/${news.slug}/`)}>
+    <img src={siteUrl(news.image)} alt={news.imageAlt} loading="lazy" />
   </a>
   <div class="news-card__body">
     <div class="news-card__meta">
@@ -19,9 +20,15 @@ const { news } = Astro.props as { news: NewsSummary };
       }
       <time datetime={news.createdAt}>{formatNewsDate(news.createdAt)}</time>
     </div>
-    {news.title && <h3><a href={`/noticias/${news.slug}/`}>{news.title}</a></h3>}
+    {
+      news.title && (
+        <h3>
+          <a href={siteUrl(`/noticias/${news.slug}/`)}>{news.title}</a>
+        </h3>
+      )
+    }
     {news.excerpt && <p>{news.excerpt}</p>}
-    <a class="news-card__read-more" href={`/noticias/${news.slug}/`}
+    <a class="news-card__read-more" href={siteUrl(`/noticias/${news.slug}/`)}
       >Ler mais <span aria-hidden="true">→</span></a
     >
   </div>

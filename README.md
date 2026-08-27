@@ -10,6 +10,26 @@ npm run sync:demo
 npm run dev
 ```
 
+## Testar no GitHub Pages
+
+O projeto está configurado para publicação como GitHub Pages em:
+
+```text
+https://gotomarcelo.github.io/site-santuario/
+```
+
+O workflow em `.github/workflows/deploy.yml` executa automaticamente quando houver push na branch `main`. Ele instala as dependências, gera o conteúdo demo, executa o build e publica a pasta `dist`.
+
+Para ativar a publicação no GitHub:
+
+1. Faça push dos arquivos para o repositório `gotomarcelo/site-santuario`.
+2. Abra **Settings → Pages**.
+3. Em **Build and deployment → Source**, selecione **GitHub Actions**.
+4. Acompanhe a execução em **Actions → Deploy Astro to GitHub Pages**.
+5. Abra a URL exibida pelo workflow.
+
+O GitHub Pages usa o conteúdo demo. O comando `sync:google` continua sendo executado localmente, pois exige OAuth e `credentials.json`; depois de sincronizar, faça commit dos arquivos gerados e envie para a branch `main` para publicá-los.
+
 Abra `http://localhost:4321`. Ao editar as fixtures e rodar `npm run sync:demo`, o conteúdo em `src/content/pages/` é regenerado. O build de produção é validado com:
 
 ```bash
