@@ -1,14 +1,26 @@
 ---
 import Header from "./blocks/Header/Header.astro";
+import Footer from "./blocks/Footer/Footer.astro";
 import Hero from "./blocks/Hero/Hero.astro";
 import MassSchedule from "./blocks/MassSchedule/MassSchedule.astro";
+import News from "./blocks/News/News.astro";
+import AllNews from "./blocks/AllNews/AllNews.astro";
+import NewsBanner from "./blocks/NewsBanner/NewsBanner.astro";
+import NewsText from "./blocks/NewsText/NewsText.astro";
+import NewsImage from "./blocks/NewsImage/NewsImage.astro";
 import type { Block } from "../lib/types";
 
 const { blocks } = Astro.props as { blocks: Block[] };
 const componentFor = {
   header: Header,
+  footer: Footer,
   hero: Hero,
   "mass-schedule": MassSchedule,
+  news: News,
+  "all-news": AllNews,
+  "news-banner": NewsBanner,
+  "news-text": NewsText,
+  "news-image": NewsImage,
 } as const;
 
 if (blocks.some((block) => block.type === "fragment")) {

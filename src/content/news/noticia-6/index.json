@@ -1,0 +1,36 @@
+{
+  "slug": "noticia-6",
+  "createdAt": "2026-08-27T18:22:03.045Z",
+  "page": {
+    "title": "noticia 6",
+    "description": "Página gerada automaticamente a partir de um Google Doc.",
+    "blocks": [
+      {
+        "type": "fragment",
+        "name": "header"
+      },
+      {
+        "type": "news-banner",
+        "image": "/images/2fd4c991f0125f6d.webp",
+        "imageAlt": "Pascom Forânea de Nazaré",
+        "category": "Encontro"
+      },
+      {
+        "type": "news-text",
+        "title": "noticia 6",
+        "titleHtml": "noticia 6\n",
+        "text": "noticia 6\n"
+      },
+      {
+        "type": "news-image",
+        "image": "/images/098e0c1d17e69b4f.webp",
+        "title": "título da imagem",
+        "imageAlt": "texto alternativo"
+      },
+      {
+        "type": "fragment",
+        "name": "footer"
+      }
+    ]
+  }
+}

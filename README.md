@@ -34,8 +34,8 @@ src/components/blocks/
 O arquivo `.astro` concentra props, HTML e comportamento do componente. O arquivo `.scss` concentra seus estilos e importa os tokens compartilhados:
 
 ```scss
-@use '../../../styles/tokens' as *;
-@use '../../../styles/mixins' as *;
+@use "../../../styles/tokens" as *;
+@use "../../../styles/mixins" as *;
 ```
 
 Os tokens ficam em `src/styles/_tokens.scss` e incluem cores, tipografia, espaçamento, raios e breakpoints (`$breakpoint-mobile`, `$breakpoint-tablet` e `$breakpoint-header`). Os mixins compartilhados ficam em `src/styles/_mixins.scss`. Para criar um novo block, siga esse padrão e registre o componente em `BlockRenderer.astro` e `FragmentRenderer.astro`.
@@ -44,12 +44,12 @@ Os tokens ficam em `src/styles/_tokens.scss` e incluem cores, tipografia, espaç
 
 O header é um block que pode ser usado diretamente em uma página ou dentro de um fragmento `header`. A primeira linha de dados define o texto pequeno da marca, o nome da marca, o CTA e sua URL. As linhas seguintes definem os links do menu:
 
-| header | | | | |
-| --- | --- | --- | --- | --- |
-| URL ou imagem do logo | Santuário | Nossa Senhora de Nazaré | Contribuir | #dizimo |
-| Início | / |
-| A Paróquia | /a-paroquia/ |
-| Missas | /missas/ |
+| header                |              |                         |            |         |
+| --------------------- | ------------ | ----------------------- | ---------- | ------- |
+| URL ou imagem do logo | Santuário    | Nossa Senhora de Nazaré | Contribuir | #dizimo |
+| Início                | /            |
+| A Paróquia            | /a-paroquia/ |
+| Missas                | /missas/     |
 
 Na primeira célula da primeira linha de dados, cole a imagem do logo diretamente no Google Docs ou informe uma URL pública da imagem. As células seguintes são o texto pequeno da marca, o nome da marca, o CTA e a URL do CTA. Quando uma imagem é colada, o sincronizador lê o `inlineObject` da Google Docs API e usa sua imagem no header. Se a primeira célula ficar vazia, o header usa a cruz de fallback.
 
@@ -61,15 +61,15 @@ O menu desktop aparece em telas largas e o menu mobile é aberto pelo botão no 
 
 O Hero usa uma tabela com uma linha de configuração. A imagem pode ser uma URL pública ou uma imagem colada na célula correspondente:
 
-| hero | | | | | | | |
-| --- | --- | --- | --- | --- | --- | --- | --- |
+| hero    |                |          |                       |           |        |                   |         |
+| ------- | -------------- | -------- | --------------------- | --------- | ------ | ----------------- | ------- |
 | eyebrow | título inicial | destaque | continuação do título | descrição | imagem | texto alternativo | legenda |
 
 Exemplo:
 
-| hero | | | | | | | |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Bem-vindo ao Santuário | Um lugar de | Fé | Esperança e Amor | O Santuário Nossa Senhora de Nazaré é um espaço sagrado de fé e espiritualidade. | imagem da igreja | Fachada do Santuário Nossa Senhora de Nazaré | Santuário Nossa Senhora de Nazaré — Cohatrac |
+| hero                   |             |     |                  |                                                                                  |                  |                                              |                                              |
+| ---------------------- | ----------- | --- | ---------------- | -------------------------------------------------------------------------------- | ---------------- | -------------------------------------------- | -------------------------------------------- |
+| Bem-vindo ao Santuário | Um lugar de | Fé  | Esperança e Amor | O Santuário Nossa Senhora de Nazaré é um espaço sagrado de fé e espiritualidade. | imagem da igreja | Fachada do Santuário Nossa Senhora de Nazaré | Santuário Nossa Senhora de Nazaré — Cohatrac |
 
 O campo `destaque` aparece em dourado e itálico. A imagem pode ser colada diretamente no Google Docs; durante `npm run sync:google`, ela é baixada, convertida para WebP e salva localmente em `public/images/`.
 
@@ -77,17 +77,59 @@ O campo `destaque` aparece em dourado e itálico. A imagem pode ser colada diret
 
 Use o identificador `mass-schedule` (ou `missas`) na primeira linha. A primeira linha de dados define título, descrição e observação. As linhas seguintes usam três colunas: grupo, dia e horário. O componente agrupa automaticamente as linhas com o mesmo grupo e não solicita local, pois todas as celebrações acontecem na mesma igreja.
 
-| mass-schedule | | |
-| --- | --- | --- |
+| mass-schedule       |                                                |                                                               |
+| ------------------- | ---------------------------------------------- | ------------------------------------------------------------- |
 | Horários das Missas | Venha participar das celebrações eucarísticas. | Os horários podem sofrer alterações em celebrações especiais. |
-| Presenciais | Segunda a Sexta-feira | 6h30 e 18h |
-| Presenciais | Sábado | 6h30 e 17h |
-| Presenciais | Domingo | 6h30, 9h, 17h e 19h |
-| Transmitidas | Segunda a Sexta-feira | 18h |
-| Transmitidas | Sábado | 17h |
-| Transmitidas | Domingo | 9h e 19h |
+| Presenciais         | Segunda a Sexta-feira                          | 6h30 e 18h                                                    |
+| Presenciais         | Sábado                                         | 6h30 e 17h                                                    |
+| Presenciais         | Domingo                                        | 6h30, 9h, 17h e 19h                                           |
+| Transmitidas        | Segunda a Sexta-feira                          | 18h                                                           |
+| Transmitidas        | Sábado                                         | 17h                                                           |
+| Transmitidas        | Domingo                                        | 9h e 19h                                                      |
 
 O resultado é uma seção com cartões por grupo, adaptada para telas menores. Não inclua uma coluna de local.
+
+### Notícias
+
+Crie uma pasta `noticias` dentro da pasta raiz do Drive e coloque um documento para cada notícia. O nome do documento vira o slug da notícia e o `createdTime` do Drive define a ordem, da mais nova para a mais antiga:
+
+```text
+noticias/
+├── campanha-do-agasalho/
+│   └── Campanha do Agasalho (Google Docs)
+└── dia-do-padre/
+	└── Dia do Padre (Google Docs)
+```
+
+Também é aceito colocar os documentos diretamente dentro de `noticias`:
+
+```text
+noticias/
+├── Campanha do Agasalho (Google Docs)
+└── Dia do Padre (Google Docs)
+```
+
+Cada documento de notícia deve conter estas tabelas:
+
+```text
+banner  -> imagem | texto alternativo | categoria
+text    -> título | texto completo
+image   -> imagem | título da imagem | texto alternativo
+```
+
+No block `text`, o título e o texto são opcionais separadamente: preenchendo apenas o título, somente o título aparece; preenchendo apenas o texto, somente o texto aparece; deixando ambos vazios, a tabela é ignorada. Quebras de linha, negrito e itálico aplicados no Google Docs são preservados na página da notícia. Para aplicar formatação, selecione o trecho na célula e use os controles normais do Google Docs.
+
+No block `text`, título e texto são opcionais individualmente. Se somente um for preenchido, somente ele é renderizado; se os dois estiverem vazios, o block é ignorado. Quebras de linha, `negrito` e `itálico` aplicados no Google Docs são preservados na página. O resumo dos cards remove a formatação e mantém apenas o texto.
+
+A imagem do `banner` é usada nos cards de `News` e `AllNews`. O título e o texto do block `text` também aparecem no card, com o texto sendo usado como resumo. Os blocks `image` aparecem somente na página individual. Imagens coladas ou URLs são convertidas para WebP durante `npm run sync:google`.
+
+Para inserir o preview de três notícias em qualquer página, use uma tabela:
+
+| news        |                  |                                       |           |            |
+| ----------- | ---------------- | ------------------------------------- | --------- | ---------- |
+| Comunicados | Últimas Notícias | Acompanhe as novidades da comunidade. | Ver todas | /noticias/ |
+
+O componente `AllNews` mostra nove notícias por página e cria URLs como `/noticias/`, `/noticias/pagina/2/` e assim por diante. Cada notícia gera uma página individual em `/noticias/nome-do-documento/`.
 
 ### Fragmentos reutilizáveis
 
@@ -103,11 +145,32 @@ Essa estrutura gera `src/content/fragments/header/index.json`. O documento usa o
 
 Na página que deve usar um fragmento, adicione uma tabela cuja primeira linha seja `fragment` e cuja primeira célula da segunda linha contenha o nome do fragmento:
 
-| fragment | |
-| --- | --- |
-| header | |
+| fragment |     |
+| -------- | --- |
+| header   |     |
 
 A referência usa o caminho do documento dentro de `fragmentos`, sem a extensão do arquivo. Para documentos diretamente dentro da pasta, use apenas o nome, como `header`. A referência pode aparecer em qualquer posição e o mesmo fragmento pode ser usado em várias páginas.
+
+Para o footer, crie o documento `footer` em `fragmentos/footer/` e use uma tabela com esta estrutura:
+
+| footer          |             |                                                   |                         |                                                 |                          |
+| --------------- | ----------- | ------------------------------------------------- | ----------------------- | ----------------------------------------------- | ------------------------ |
+| Logo (opcional) | Santuário   | Nossa Senhora de Nazaré                           | Descrição da comunidade | © 2025 Santuário. Todos os direitos reservados. | Diocese de Belém do Pará |
+| quick           | Início      | /                                                 |
+| quick           | Notícias    | /noticias/                                        |
+| service         | Batismo     | /batismo/                                         |
+| service         | Matrimônio  | /matrimonio/                                      |
+| contact         | Tel         | (91) 3234-5678                                    |
+| contact         | E-mail      | secretaria@santuarionazare.org.br                 |
+| office          | Atendimento | Seg - Sex: 08h00 às 18h00; Sábado: 08h00 às 12h00 |
+
+A primeira linha de dados contém, nesta ordem: logo opcional, texto pequeno da marca, nome da marca, descrição, copyright e diocese. Cole a imagem diretamente na primeira célula ou informe uma URL pública. Se a primeira célula ficar vazia, use a tabela antiga sem a coluna de logo e o footer exibirá a cruz dourada. Nas linhas seguintes, `quick` cria links rápidos, `service` cria links de sacramentos, `contact` cria informações de contato e `office` define o atendimento. Para redes sociais, use `contact` com o primeiro valor começando por `@`, por exemplo `@Instagram`, e a URL no terceiro campo. A imagem será convertida para WebP durante `npm run sync:google`.
+
+Em cada página, referencie o fragmento com:
+
+| fragment |     |
+| -------- | --- |
+| footer   |     |
 
 ## Conectar a um Google Doc real
 

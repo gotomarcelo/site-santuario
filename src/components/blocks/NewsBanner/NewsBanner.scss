@@ -1,0 +1,29 @@
+@use "../../../styles/tokens" as *;
+
+.news-banner {
+  position: relative;
+  margin-inline: calc(50% - 50vw);
+  overflow: hidden;
+  background: $color-cream-dark;
+}
+.news-banner img {
+  width: 100%;
+  height: min(56vw, 520px);
+  min-height: 280px;
+  display: block;
+  object-fit: cover;
+}
+.news-banner span {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  padding: 5px 10px;
+  border-radius: $radius-sm;
+  color: $color-white;
+  background: rgba($color-brown, 0.75);
+  font-family: $font-sans;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}

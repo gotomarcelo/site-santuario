@@ -1,0 +1,23 @@
+---
+import AllNews from "../../components/blocks/AllNews/AllNews.astro";
+import PageLayout from "../../components/PageLayout.astro";
+import type { Page } from "../../lib/types";
+
+const page: Page = {
+  title: "Notícias",
+  description: "Acompanhe as notícias do Santuário Nossa Senhora de Nazaré.",
+  blocks: [
+    { type: "fragment", name: "header" },
+    {
+      type: "all-news",
+      eyebrow: "Comunicados",
+      title: "Últimas Notícias",
+      description: "Acompanhe as novidades, celebrações e ações da comunidade.",
+      allLabel: "",
+      allHref: "/noticias/",
+    },
+  ],
+};
+---
+
+<PageLayout page={page} />

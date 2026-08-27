@@ -1,0 +1,40 @@
+---
+import type { NewsItem, NewsListingBlock } from "../../../lib/types";
+import { summarizeNews } from "../../../lib/news";
+import NewsCard from "../NewsCard/NewsCard.astro";
+import "./News.scss";
+
+const block = Astro.props as NewsListingBlock;
+const modules = import.meta.glob("../../../content/news/**/index.json", {
+  eager: true,
+});
+const news = Object.values(modules)
+  .map((module) => (module as { default: NewsItem }).default)
+  .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+  .slice(0, 3)
+  .map(summarizeNews);
+---
+
+<section id="noticias" class="news-preview">
+  <div class="news-preview__background"></div>
+  <div class="news-preview__heading">
+    <div>
+      <p class="news-preview__label">
+        <span aria-hidden="true"></span>{block.eyebrow}<span aria-hidden="true"
+        ></span>
+      </p>
+      <h2>{block.title}</h2>
+      {
+        block.description && (
+          <p class="news-preview__description">{block.description}</p>
+        )
+      }
+    </div>
+    <a class="news-preview__all" href={block.allHref}
+      >{block.allLabel} <span aria-hidden="true">→</span></a
+    >
+  </div>
+  <div class="news-preview__grid">
+    {news.map((item) => <NewsCard news={item} />)}
+  </div>
+</section>

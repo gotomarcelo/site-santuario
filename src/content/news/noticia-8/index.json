@@ -1,0 +1,36 @@
+{
+  "slug": "noticia-8",
+  "createdAt": "2026-08-27T18:22:38.477Z",
+  "page": {
+    "title": "noticia 8",
+    "description": "Página gerada automaticamente a partir de um Google Doc.",
+    "blocks": [
+      {
+        "type": "fragment",
+        "name": "header"
+      },
+      {
+        "type": "news-banner",
+        "image": "/images/7fd5d023da19508a.webp",
+        "imageAlt": "Pascom Forânea de Nazaré",
+        "category": "Encontro"
+      },
+      {
+        "type": "news-text",
+        "title": "noticia 8",
+        "titleHtml": "noticia 8\n",
+        "text": "noticia 8\n"
+      },
+      {
+        "type": "news-image",
+        "image": "/images/681510702465e18a.webp",
+        "title": "título da imagem",
+        "imageAlt": "texto alternativo"
+      },
+      {
+        "type": "fragment",
+        "name": "footer"
+      }
+    ]
+  }
+}

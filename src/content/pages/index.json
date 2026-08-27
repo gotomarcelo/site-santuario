@@ -8,12 +8,12 @@
     },
     {
       "type": "hero",
-      "eyebrow": "Bem-vindo ao Santuário",
+      "eyebrow": "Bem-vindo ao santuário",
       "title": "Um lugar de",
       "highlight": "Fé",
       "titleAfter": "Esperança e Amor",
       "description": "O Santuário Nossa Senhora de Nazaré é um espaço sagrado de fé e espiritualidade.",
-      "image": "/images/db73e3d2fbc408cc.webp",
+      "image": "/images/10ed52de5c567ec0.webp",
       "imageAlt": "Fachada do Santuário",
       "caption": "Santuário Nossa Senhora de Nazaré — Cohatrac"
     },
@@ -58,6 +58,18 @@
           ]
         }
       ]
+    },
+    {
+      "type": "news",
+      "eyebrow": "Comunicados",
+      "title": "Últimas Notícias",
+      "description": "Acompanhe as novidades da comunidade.",
+      "allLabel": "Ver todas",
+      "allHref": "/noticias/"
+    },
+    {
+      "type": "fragment",
+      "name": "footer"
     }
   ]
 }

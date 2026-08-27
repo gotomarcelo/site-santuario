@@ -1,0 +1,55 @@
+{
+  "title": "footer",
+  "description": "Página gerada automaticamente a partir de um Google Doc.",
+  "blocks": [
+    {
+      "type": "footer",
+      "logo": "/images/920792efa08b11bf.webp",
+      "eyebrow": "Santuário",
+      "brand": "Nossa Senhora de Nazaré",
+      "description": "Cohatrac I, São Luís - MA, 65054-225",
+      "copyright": "© 2026 Santuário. Todos os direitos reservados.",
+      "diocese": "CÍRIO DE NAZARÉ: PATRIMÔNIO CULTURAL IMATERIAL(MA) E MANIFESTAÇÃO DA CULTURA NACIONAL",
+      "quickLinks": [
+        {
+          "label": "Início",
+          "href": "/"
+        },
+        {
+          "label": "Notícia",
+          "href": "/noticias/"
+        }
+      ],
+      "services": [
+        {
+          "label": "Matrimônio",
+          "href": "/"
+        },
+        {
+          "label": "Batismo",
+          "href": "/"
+        }
+      ],
+      "contacts": [
+        {
+          "icon": "Tel",
+          "text": "(98)3238-3640 | (98)99909-5939"
+        },
+        {
+          "icon": "E-mail",
+          "text": "pnsnaz@hotmail.com"
+        },
+        {
+          "icon": "@Instagram",
+          "text": "https://www.instagram.com/santuariodenazareslz/"
+        },
+        {
+          "icon": "@YouTube",
+          "text": "https://www.instagram.com/santuariodenazareslz/"
+        }
+      ],
+      "officeLabel": "Atendimento",
+      "officeHours": "Ter - Sex: 07h00 às 12h00; Sábado: 08h00 às 12h00 Domingo: 7h às 11h00; Seg - Sáb: 14h às 20h;"
+    }
+  ]
+}

@@ -26,6 +26,25 @@ export type HeaderBlock = {
   links: Array<{ label: string; href: string }>;
 };
 
+export type FooterLink = { label: string; href: string };
+
+export type FooterContact = { icon: string; text: string };
+
+export type FooterBlock = {
+  type: "footer";
+  eyebrow: string;
+  brand: string;
+  description: string;
+  logo?: string;
+  quickLinks: FooterLink[];
+  services: FooterLink[];
+  contacts: FooterContact[];
+  officeLabel: string;
+  officeHours: string;
+  copyright: string;
+  diocese: string;
+};
+
 export type MassScheduleEntry = {
   day: string;
   time: string;
@@ -44,7 +63,53 @@ export type MassScheduleBlock = {
   groups: MassScheduleGroup[];
 };
 
-export type Block = FragmentBlock | HeaderBlock | HeroBlock | MassScheduleBlock;
+export type NewsBannerBlock = {
+  type: "news-banner";
+  image: string;
+  imageAlt: string;
+  category: string;
+};
+
+export type NewsTextBlock = {
+  type: "news-text";
+  title: string;
+  titleHtml?: string;
+  text: string;
+};
+
+export type NewsImageBlock = {
+  type: "news-image";
+  image: string;
+  title: string;
+  imageAlt: string;
+};
+
+export type Block =
+  | FragmentBlock
+  | HeaderBlock
+  | FooterBlock
+  | HeroBlock
+  | MassScheduleBlock
+  | NewsBannerBlock
+  | NewsTextBlock
+  | NewsImageBlock
+  | NewsListingBlock;
+
+export type NewsItem = {
+  slug: string;
+  createdAt: string;
+  page: Page;
+};
+
+export type NewsListingBlock = {
+  type: "news" | "all-news";
+  eyebrow: string;
+  title: string;
+  description: string;
+  allLabel: string;
+  allHref: string;
+  currentPage?: number;
+};
 
 export type Page = {
   title: string;

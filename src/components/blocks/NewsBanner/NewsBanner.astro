@@ -1,0 +1,11 @@
+---
+import type { NewsBannerBlock } from "../../../lib/types";
+import "./NewsBanner.scss";
+
+const { image, imageAlt, category } = Astro.props as NewsBannerBlock;
+---
+
+<div class="news-banner">
+  <img src={image} alt={imageAlt} />
+  {category && <span>{category}</span>}
+</div>

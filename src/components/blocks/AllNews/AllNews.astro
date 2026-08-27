@@ -1,0 +1,65 @@
+---
+import type { NewsItem, NewsListingBlock } from "../../../lib/types";
+import { summarizeNews } from "../../../lib/news";
+import NewsCard from "../NewsCard/NewsCard.astro";
+import "./AllNews.scss";
+
+const block = Astro.props as NewsListingBlock & { currentPage?: number };
+const currentPage = block.currentPage ?? 1;
+const modules = import.meta.glob("../../../content/news/**/index.json", {
+  eager: true,
+});
+const allNews = Object.values(modules)
+  .map((module) => (module as { default: NewsItem }).default)
+  .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+  .map(summarizeNews);
+const pageSize = 9;
+const totalPages = Math.max(1, Math.ceil(allNews.length / pageSize));
+const pageNews = allNews.slice(
+  (currentPage - 1) * pageSize,
+  currentPage * pageSize,
+);
+const pageHref = (page: number) =>
+  page === 1 ? "/noticias/" : `/noticias/pagina/${page}/`;
+---
+
+<section class="all-news" aria-labelledby="all-news-title">
+  <header class="all-news__heading">
+    <p class="all-news__label">
+      <span aria-hidden="true"></span>{block.eyebrow}<span aria-hidden="true"
+      ></span>
+    </p>
+    <h1 id="all-news-title">{block.title}</h1>
+    {block.description && <p>{block.description}</p>}
+  </header>
+  <div class="all-news__grid">
+    {pageNews.map((item) => <NewsCard news={item} />)}
+  </div>
+  {
+    totalPages > 1 && (
+      <nav class="all-news__pagination" aria-label="Paginação de notícias">
+        {currentPage > 1 && (
+          <a href={pageHref(currentPage - 1)} aria-label="Página anterior">
+            ←
+          </a>
+        )}
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+          (page) => (
+            <a
+              class:list={{ active: page === currentPage }}
+              href={pageHref(page)}
+              aria-current={page === currentPage ? "page" : undefined}
+            >
+              {page}
+            </a>
+          ),
+        )}
+        {currentPage < totalPages && (
+          <a href={pageHref(currentPage + 1)} aria-label="Próxima página">
+            →
+          </a>
+        )}
+      </nav>
+    )
+  }
+</section>

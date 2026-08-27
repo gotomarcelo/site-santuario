@@ -1,0 +1,22 @@
+---
+import PageLayout from "../../components/PageLayout.astro";
+import type { NewsItem, Page } from "../../lib/types";
+
+export function getStaticPaths() {
+  const modules = import.meta.glob("../../content/news/**/index.json", {
+    eager: true,
+  });
+  return Object.entries(modules).map(([file, module]) => {
+    const item = (module as { default: NewsItem }).default;
+    return { params: { slug: item.slug }, props: { item } };
+  });
+}
+
+const { item } = Astro.props as { item: NewsItem };
+const page: Page = {
+  ...item.page,
+  blocks: [{ type: "fragment", name: "header" }, ...item.page.blocks],
+};
+---
+
+<PageLayout page={page} />

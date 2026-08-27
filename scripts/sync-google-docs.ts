@@ -4,7 +4,8 @@ import "dotenv/config";
 import { google } from "googleapis";
 import { parseGoogleDocument } from "./google-doc-parser";
 import { materializePageImages, prepareImageDirectory } from "./image-assets";
-import { writeFragments, writePages } from "./content-writer";
+import { writeFragments, writeNews, writePages } from "./content-writer";
+import type { NewsItem } from "../src/lib/types";
 
 const documentId = process.env.GOOGLE_DOCUMENT_ID;
 const rootFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
@@ -50,7 +51,7 @@ async function pageFromDocument(id: string) {
 async function childrenOf(folderId: string) {
   const response = await google.drive({ version: "v3", auth }).files.list({
     q: `'${folderId}' in parents and trashed = false`,
-    fields: "files(id,name,mimeType)",
+    fields: "files(id,name,mimeType,createdTime)",
     orderBy: "folder,name",
     pageSize: 1000,
   });
@@ -65,7 +66,10 @@ async function pagesInFolder(folderId: string, path: string[] = []) {
   const folders = children.filter(
     (file) =>
       file.mimeType === "application/vnd.google-apps.folder" &&
-      !(path.length === 0 && slugify(file.name ?? "") === "fragmentos"),
+      !(
+        path.length === 0 &&
+        ["fragmentos", "noticias"].includes(slugify(file.name ?? ""))
+      ),
   );
 
   if (documents.length > 1) {
@@ -131,11 +135,54 @@ async function fragmentsInFolder(folderId: string, path: string[] = []) {
   return fragments;
 }
 
+async function newsInFolder(folderId: string): Promise<NewsItem[]> {
+  const children = await childrenOf(folderId);
+  const documents = children.filter(
+    (file) => file.mimeType === "application/vnd.google-apps.document",
+  );
+  const folders = children.filter(
+    (file) => file.mimeType === "application/vnd.google-apps.folder",
+  );
+  const slugs = new Set<string>();
+  const newsDocuments = documents.filter(
+    (file) => !["noticias", "index"].includes(slugify(file.name ?? "")),
+  );
+  const directNews = await Promise.all(
+    newsDocuments.map(async (document) => {
+      const slug = slugify(document.name ?? "");
+      if (!slug)
+        throw new Error(
+          "Toda notícia precisa ter um nome de documento válido.",
+        );
+      if (slugs.has(slug))
+        throw new Error(`Duas notícias geram o mesmo slug: ${slug}.`);
+      slugs.add(slug);
+      return {
+        slug,
+        createdAt: document.createdTime ?? new Date(0).toISOString(),
+        page: await pageFromDocument(document.id!),
+      };
+    }),
+  );
+  const nestedNews = (
+    await Promise.all(folders.map((folder) => newsInFolder(folder.id!)))
+  ).flat();
+  const allNews = [...directNews, ...nestedNews];
+  slugs.clear();
+  for (const item of allNews) {
+    if (slugs.has(item.slug))
+      throw new Error(`Duas notícias geram o mesmo slug: ${item.slug}.`);
+    slugs.add(item.slug);
+  }
+  return allNews.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
 let pages;
 let fragments: Array<{
   path: string[];
   page: Awaited<ReturnType<typeof pageFromDocument>>;
 }> = [];
+let news: NewsItem[] = [];
 await prepareImageDirectory();
 if (rootFolderId) {
   const rootChildren = await childrenOf(rootFolderId);
@@ -144,16 +191,24 @@ if (rootFolderId) {
       file.mimeType === "application/vnd.google-apps.folder" &&
       slugify(file.name ?? "") === "fragmentos",
   );
+  const newsFolder = rootChildren.find(
+    (file) =>
+      file.mimeType === "application/vnd.google-apps.folder" &&
+      slugify(file.name ?? "") === "noticias",
+  );
   pages = await pagesInFolder(rootFolderId);
   if (fragmentFolder?.id)
     fragments = await fragmentsInFolder(fragmentFolder.id);
+  if (newsFolder?.id) news = await newsInFolder(newsFolder.id);
 } else {
   pages = [{ path: [], page: await pageFromDocument(documentId!) }];
 }
 
 await writePages(pages);
 await writeFragments(fragments);
+await writeNews(news);
 console.log(`${pages.length} página(s) sincronizada(s) em src/content/pages/.`);
 console.log(
   `${fragments.length} fragmento(s) sincronizado(s) em src/content/fragments/.`,
 );
+console.log(`${news.length} notícia(s) sincronizada(s) em src/content/news/.`);

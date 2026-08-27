@@ -40,7 +40,16 @@ export async function materializePageImages(page: Page): Promise<Page> {
       if (block.type === "header" && block.logo) {
         return { ...block, logo: await toWebp(block.logo) };
       }
+      if (block.type === "footer" && block.logo) {
+        return { ...block, logo: await toWebp(block.logo) };
+      }
       if (block.type === "hero" && block.image) {
+        return { ...block, image: await toWebp(block.image) };
+      }
+      if (block.type === "news-banner" && block.image) {
+        return { ...block, image: await toWebp(block.image) };
+      }
+      if (block.type === "news-image" && block.image) {
         return { ...block, image: await toWebp(block.image) };
       }
       return block;

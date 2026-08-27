@@ -1,0 +1,193 @@
+@use "../../../styles/tokens" as *;
+@use "../../../styles/mixins" as *;
+
+.site-footer {
+  color: $color-text-mid;
+  font-family: $font-sans;
+  margin: 0 $space-5;
+  position: relative;
+
+  &__background {
+    position: absolute;
+    justify-self: center;
+    top: -3px;
+    width: 100vw;
+    height: calc(100% + 3px);
+    z-index: -1;
+    background: $color-cream-dark;
+    border-top: 3px solid $color-gold;
+  }
+
+  &__main {
+    @include content-width(1280px);
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+  &__grid {
+    display: grid;
+    grid-template-columns: 1.3fr repeat(3, 1fr);
+    gap: 40px;
+  }
+  &__brand-lockup {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: $color-brown;
+    text-decoration: none;
+  }
+  &__brand-lockup small,
+  &__office small {
+    display: block;
+    color: $color-gold;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  &__brand-lockup strong {
+    display: block;
+    margin-top: 3px;
+    font-family: $font-serif;
+    font-size: 0.9rem;
+  }
+  &__mark,
+  &__logo {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    border: 2px solid $color-gold;
+    border-radius: 50%;
+    background: $color-white;
+  }
+  &__logo {
+    object-fit: contain;
+  }
+  &__mark {
+    position: relative;
+    display: grid;
+    place-items: center;
+    color: $color-gold;
+  }
+  &__mark span,
+  &__mark span::after {
+    position: absolute;
+    display: block;
+    content: "";
+    background: currentColor;
+  }
+  &__mark span {
+    width: 4px;
+    height: 20px;
+  }
+  &__mark span::after {
+    width: 15px;
+    height: 4px;
+    top: 5px;
+    left: -5px;
+  }
+  &__brand > p,
+  &__brand > p {
+    max-width: 280px;
+    margin: 20px 0;
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+  &__social {
+    display: flex;
+    gap: 8px;
+  }
+  &__social a {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border: 1px solid $color-border;
+    border-radius: 50%;
+    color: $color-gold;
+    background: $color-white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  &__social a:hover {
+    background: rgba($color-gold-light, 0.35);
+  }
+  h2 {
+    margin: 0 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $color-border;
+    color: $color-brown;
+    font-family: $font-serif;
+    font-size: 1rem;
+    letter-spacing: 0;
+  }
+  &__links ul {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  &__links a {
+    color: $color-text-mid;
+    font-size: 0.82rem;
+    text-decoration: none;
+  }
+  &__links a:hover {
+    color: $color-gold;
+  }
+  &__contact-list {
+    display: grid;
+    gap: 12px;
+  }
+  &__contact-list p {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    white-space: pre-line;
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+  &__contact-list span {
+    flex: 1 0 20px;
+    color: $color-gold;
+  }
+  &__office {
+    margin-top: 20px;
+  }
+  &__office p {
+    margin: 5px 0 0;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+  &__legal {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 20px max(24px, calc((100% - 1280px) / 2));
+    border-top: 1px solid $color-border;
+    color: $color-text-mid;
+    background: $color-beige;
+    font-size: 0.75rem;
+  }
+}
+
+@include below($breakpoint-header) {
+  .site-footer__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@include below($breakpoint-mobile) {
+  .site-footer__main {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+  .site-footer__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .site-footer__legal {
+    flex-direction: column;
+  }
+}
