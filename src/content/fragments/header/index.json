@@ -1,9 +1,10 @@
 {
-  "title": "Header",
+  "title": "header",
   "description": "Página gerada automaticamente a partir de um Google Doc.",
   "blocks": [
     {
       "type": "header",
+      "logo": "/images/5347fc44400060e9.webp",
       "eyebrow": "Santuário",
       "brand": "Nossa Senhora de Nazaré",
       "cta": {
@@ -12,12 +13,20 @@
       },
       "links": [
         {
-          "label": "Início",
-          "href": "/"
+          "label": "A Paróquia",
+          "href": "/a-paroquia"
         },
         {
-          "label": "Quem somos",
-          "href": "/quem-somos/"
+          "label": "Missas",
+          "href": "/missas"
+        },
+        {
+          "label": "Notícias",
+          "href": "/noticias"
+        },
+        {
+          "label": "Contato",
+          "href": "/contato"
         }
       ]
     }

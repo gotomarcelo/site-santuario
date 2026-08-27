@@ -1,9 +1,15 @@
 ---
 import Header from "./blocks/Header/Header.astro";
+import Hero from "./blocks/Hero/Hero.astro";
+import MassSchedule from "./blocks/MassSchedule/MassSchedule.astro";
 import type { Block } from "../lib/types";
 
 const { blocks } = Astro.props as { blocks: Block[] };
-const componentFor = { header: Header } as const;
+const componentFor = {
+  header: Header,
+  hero: Hero,
+  "mass-schedule": MassSchedule,
+} as const;
 
 if (blocks.some((block) => block.type === "fragment")) {
   throw new Error("Fragmentos não podem referenciar outros fragmentos.");

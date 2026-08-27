@@ -2,13 +2,21 @@
 import type { HeaderBlock } from "../../../lib/types";
 import "./Header.scss";
 
-const { eyebrow, brand, cta, links } = Astro.props as HeaderBlock;
+const { logo, eyebrow, brand, cta, links } = Astro.props as HeaderBlock;
 ---
 
 <header class="site-header">
   <div class="site-header__inner">
     <a class="site-header__brand" href="/" aria-label={brand}>
-      <span class="site-header__mark" aria-hidden="true">+</span>
+      {
+        logo ? (
+          <img class="site-header__logo" src={logo} alt="" />
+        ) : (
+          <span class="site-header__mark" aria-hidden="true">
+            <span />
+          </span>
+        )
+      }
       <span class="site-header__name">
         <span class="site-header__eyebrow">{eyebrow}</span>
         <span class="site-header__title">{brand}</span>

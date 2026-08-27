@@ -5,9 +5,10 @@
   position: fixed;
   inset: 0 0 auto;
   z-index: 50;
-  color: $color-header-text;
-  background: $color-header;
-  border-bottom: 1px solid rgba($color-gold, 0.3);
+  color: $color-brown;
+  background: $color-white;
+  border-bottom: 1px solid $color-beige;
+  box-shadow: 0 2px 20px rgba($color-brown, 0.07);
 
   &__inner {
     max-width: 1280px;
@@ -29,16 +30,40 @@
     text-decoration: none;
   }
   &__mark {
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
     display: grid;
     place-items: center;
     border: 2px solid $color-gold;
     border-radius: 50%;
+    background: $color-cream-dark;
     color: $color-gold;
-    font-family: $font-serif;
-    font-size: 2rem;
-    line-height: 1;
+    position: relative;
+
+    span,
+    span::after {
+      position: absolute;
+      display: block;
+      background: currentColor;
+      content: "";
+    }
+    span {
+      width: 4px;
+      height: 22px;
+    }
+    span::after {
+      width: 16px;
+      height: 4px;
+      top: 5px;
+      left: -6px;
+    }
+  }
+  &__logo {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    object-fit: contain;
+    border-radius: 50%;
   }
   &__name {
     display: grid;
@@ -54,7 +79,7 @@
   }
   &__title {
     max-width: 220px;
-    color: $color-header-text;
+    color: $color-brown;
     font-family: $font-serif;
     font-size: 0.95rem;
     font-weight: 600;
@@ -67,7 +92,7 @@
   }
   &__nav a,
   &__mobile-nav a {
-    color: rgba($color-header-text, 0.8);
+    color: $color-text-mid;
     font-family: sans-serif;
     font-size: 0.8rem;
     font-weight: 500;
@@ -75,6 +100,9 @@
   }
   &__nav a:hover,
   &__mobile-nav a:hover {
+    color: $color-gold;
+  }
+  &__nav a:first-child {
     color: $color-gold;
   }
   &__actions {
@@ -88,8 +116,8 @@
     justify-content: center;
     padding: 10px 18px;
     border-radius: $radius-sm;
-    color: $color-header !important;
-    background: $color-gold;
+    color: $color-white !important;
+    background: linear-gradient(135deg, $color-gold, $color-gold-light);
     font-family: sans-serif;
     font-size: 0.78rem;
     font-weight: 700;
@@ -141,12 +169,12 @@
   &__mobile-nav {
     display: none;
     padding: $space-2 $space-5 $space-4;
-    background: $color-header-deep;
+    background: $color-cream;
   }
   &__mobile-nav a {
     display: block;
     padding: $space-3 $space-1;
-    border-bottom: 1px solid rgba($color-gold, 0.12);
+    border-bottom: 1px solid $color-beige;
     font-size: 0.9rem;
   }
   &__mobile-cta {

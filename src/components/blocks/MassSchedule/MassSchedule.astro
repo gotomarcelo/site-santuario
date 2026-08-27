@@ -1,0 +1,61 @@
+---
+import type { MassScheduleBlock } from "../../../lib/types";
+import "./MassSchedule.scss";
+
+const { title, description, note, groups } = Astro.props as MassScheduleBlock;
+---
+
+<section
+  id="missas"
+  class="mass-schedule"
+  aria-labelledby="mass-schedule-title"
+>
+  <div class="mass-schedule__intro">
+    <p class="mass-schedule__label">
+      <span aria-hidden="true"></span>Celebrações<span aria-hidden="true"
+      ></span>
+    </p>
+    <h2 id="mass-schedule-title">{title}</h2>
+    {description && <p class="mass-schedule__description">{description}</p>}
+  </div>
+
+  <div class="mass-schedule__groups">
+    {
+      groups.map((group) => (
+        <section
+          class="mass-schedule__group"
+          aria-labelledby={`mass-group-${group.name}`}
+        >
+          <h3 id={`mass-group-${group.name}`}>
+            <span class="mass-schedule__group-icon" aria-hidden="true" />
+            {group.name}
+          </h3>
+          <div class="mass-schedule__entries">
+            {group.entries.map((entry) => (
+              <article class="mass-schedule__entry">
+                <div class="mass-schedule__day">{entry.day}</div>
+                <div class="mass-schedule__time">
+                  <span class="mass-schedule__clock" aria-hidden="true" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#c8a84b"
+                    width="15px"
+                    height="15px"
+                    viewBox="0 0 32 32"
+                    version="1.1"
+                  >
+                    <title>clock</title>
+                    <path d="M16 0.75c-8.422 0-15.25 6.828-15.25 15.25s6.828 15.25 15.25 15.25c8.422 0 15.25-6.828 15.25-15.25v0c-0.010-8.418-6.832-15.24-15.249-15.25h-0.001zM16 28.75c-7.042 0-12.75-5.708-12.75-12.75s5.708-12.75 12.75-12.75c7.042 0 12.75 5.708 12.75 12.75v0c-0.008 7.038-5.712 12.742-12.749 12.75h-0.001zM17.25 15.482v-9.482c0-0.69-0.56-1.25-1.25-1.25s-1.25 0.56-1.25 1.25v0 10c0 0.345 0.14 0.658 0.366 0.884l3.999 4.001c0.226 0.226 0.539 0.366 0.884 0.366 0.691 0 1.251-0.56 1.251-1.251 0-0.345-0.14-0.658-0.366-0.884l0 0z" />
+                  </svg>
+                  {entry.time}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  {note && <p class="mass-schedule__note">{note}</p>}
+</section>

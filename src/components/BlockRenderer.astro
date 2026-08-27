@@ -1,5 +1,7 @@
 ---
 import Header from "./blocks/Header/Header.astro";
+import Hero from "./blocks/Hero/Hero.astro";
+import MassSchedule from "./blocks/MassSchedule/MassSchedule.astro";
 import FragmentRenderer from "./FragmentRenderer.astro";
 import type { Block, Page } from "../lib/types";
 
@@ -7,7 +9,11 @@ const fragmentModules = import.meta.glob("../content/fragments/**/index.json", {
   eager: true,
 });
 const { block } = Astro.props as { block: Block };
-const componentFor = { header: Header } as const;
+const componentFor = {
+  header: Header,
+  hero: Hero,
+  "mass-schedule": MassSchedule,
+} as const;
 
 function fragmentFor(name: string): Page | undefined {
   const key = `../content/fragments/${name}/index.json`;

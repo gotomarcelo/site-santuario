@@ -5,6 +5,59 @@
     {
       "type": "fragment",
       "name": "header"
+    },
+    {
+      "type": "hero",
+      "eyebrow": "Bem-vindo ao Santuário",
+      "title": "Um lugar de",
+      "highlight": "Fé",
+      "titleAfter": "Esperança e Amor",
+      "description": "O Santuário Nossa Senhora de Nazaré é um espaço sagrado de fé e espiritualidade.",
+      "image": "/images/db73e3d2fbc408cc.webp",
+      "imageAlt": "Fachada do Santuário",
+      "caption": "Santuário Nossa Senhora de Nazaré — Cohatrac"
+    },
+    {
+      "type": "mass-schedule",
+      "title": "Horários das Missas",
+      "description": "Venha participar das celebrações eucarísticas.",
+      "note": "Os horários podem sofrer alterações.",
+      "groups": [
+        {
+          "name": "Presenciais",
+          "entries": [
+            {
+              "day": "Segunda a Sexta-feira",
+              "time": "6h30 e 18h"
+            },
+            {
+              "day": "Sábado",
+              "time": "6h30 e 17h"
+            },
+            {
+              "day": "Domingo",
+              "time": "6h30, 9h, 17h e 19h"
+            }
+          ]
+        },
+        {
+          "name": "Transmitidas",
+          "entries": [
+            {
+              "day": "Segunda a Sexta-feira",
+              "time": "18h"
+            },
+            {
+              "day": "Sábado",
+              "time": "17h"
+            },
+            {
+              "day": "Domingo",
+              "time": "9h e 19h"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -44,14 +44,50 @@ Os tokens ficam em `src/styles/_tokens.scss` e incluem cores, tipografia, espaç
 
 O header é um block que pode ser usado diretamente em uma página ou dentro de um fragmento `header`. A primeira linha de dados define o texto pequeno da marca, o nome da marca, o CTA e sua URL. As linhas seguintes definem os links do menu:
 
-| header | | | |
-| --- | --- | --- | --- |
-| Santuário | Nossa Senhora de Nazaré | Contribuir | #dizimo |
+| header | | | | |
+| --- | --- | --- | --- | --- |
+| URL ou imagem do logo | Santuário | Nossa Senhora de Nazaré | Contribuir | #dizimo |
 | Início | / |
 | A Paróquia | /a-paroquia/ |
 | Missas | /missas/ |
 
+Na primeira célula da primeira linha de dados, cole a imagem do logo diretamente no Google Docs ou informe uma URL pública da imagem. As células seguintes são o texto pequeno da marca, o nome da marca, o CTA e a URL do CTA. Quando uma imagem é colada, o sincronizador lê o `inlineObject` da Google Docs API e usa sua imagem no header. Se a primeira célula ficar vazia, o header usa a cruz de fallback.
+
+Durante `npm run sync:google`, imagens remotas do header são baixadas, convertidas para WebP com qualidade 85 e salvas em `public/images/`. O JSON passa a apontar para a URL local `/images/...webp`, evitando a expiração das URLs temporárias fornecidas pelo Google Docs. URLs de imagens inseridas nos próximos componentes podem usar a mesma etapa de materialização em `scripts/image-assets.ts`.
+
 O menu desktop aparece em telas largas e o menu mobile é aberto pelo botão no canto direito. Os links e o CTA são definidos no Google Docs; o comportamento responsivo pertence ao componente Astro.
+
+### Hero
+
+O Hero usa uma tabela com uma linha de configuração. A imagem pode ser uma URL pública ou uma imagem colada na célula correspondente:
+
+| hero | | | | | | | |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| eyebrow | título inicial | destaque | continuação do título | descrição | imagem | texto alternativo | legenda |
+
+Exemplo:
+
+| hero | | | | | | | |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Bem-vindo ao Santuário | Um lugar de | Fé | Esperança e Amor | O Santuário Nossa Senhora de Nazaré é um espaço sagrado de fé e espiritualidade. | imagem da igreja | Fachada do Santuário Nossa Senhora de Nazaré | Santuário Nossa Senhora de Nazaré — Cohatrac |
+
+O campo `destaque` aparece em dourado e itálico. A imagem pode ser colada diretamente no Google Docs; durante `npm run sync:google`, ela é baixada, convertida para WebP e salva localmente em `public/images/`.
+
+### Horários de missas
+
+Use o identificador `mass-schedule` (ou `missas`) na primeira linha. A primeira linha de dados define título, descrição e observação. As linhas seguintes usam três colunas: grupo, dia e horário. O componente agrupa automaticamente as linhas com o mesmo grupo e não solicita local, pois todas as celebrações acontecem na mesma igreja.
+
+| mass-schedule | | |
+| --- | --- | --- |
+| Horários das Missas | Venha participar das celebrações eucarísticas. | Os horários podem sofrer alterações em celebrações especiais. |
+| Presenciais | Segunda a Sexta-feira | 6h30 e 18h |
+| Presenciais | Sábado | 6h30 e 17h |
+| Presenciais | Domingo | 6h30, 9h, 17h e 19h |
+| Transmitidas | Segunda a Sexta-feira | 18h |
+| Transmitidas | Sábado | 17h |
+| Transmitidas | Domingo | 9h e 19h |
+
+O resultado é uma seção com cartões por grupo, adaptada para telas menores. Não inclua uma coluna de local.
 
 ### Fragmentos reutilizáveis
 
