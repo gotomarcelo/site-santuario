@@ -15,10 +15,17 @@ export async function prepareImageDirectory(): Promise<void> {
   await mkdir(imageDirectory, { recursive: true });
 }
 
-async function toWebp(source: string): Promise<string> {
+async function toWebp(
+  source: string,
+  getAccessToken?: () => Promise<string | null>,
+): Promise<string> {
   if (!imageUrlPattern.test(source)) return source;
 
-  const response = await fetch(source);
+  const headers = new Headers();
+  const token = await getAccessToken?.();
+  if (token) headers.set("Authorization", `Bearer ${token}`);
+
+  const response = await fetch(source, { headers });
   if (!response.ok) {
     throw new Error(
       `Não foi possível baixar a imagem ${source}: ${response.status} ${response.statusText}`,
@@ -34,23 +41,32 @@ async function toWebp(source: string): Promise<string> {
   return `/images/${filename}`;
 }
 
-export async function materializePageImages(page: Page): Promise<Page> {
+export async function materializePageImages(
+  page: Page,
+  getAccessToken?: () => Promise<string | null>,
+): Promise<Page> {
   const blocks = await Promise.all(
     page.blocks.map(async (block) => {
       if (block.type === "header" && block.logo) {
-        return { ...block, logo: await toWebp(block.logo) };
+        return { ...block, logo: await toWebp(block.logo, getAccessToken) };
       }
       if (block.type === "footer" && block.logo) {
-        return { ...block, logo: await toWebp(block.logo) };
+        return { ...block, logo: await toWebp(block.logo, getAccessToken) };
       }
       if (block.type === "hero" && block.image) {
-        return { ...block, image: await toWebp(block.image) };
+        return { ...block, image: await toWebp(block.image, getAccessToken) };
       }
       if (block.type === "news-banner" && block.image) {
-        return { ...block, image: await toWebp(block.image) };
+        return {
+          ...block,
+          image: await toWebp(block.image, getAccessToken),
+        };
       }
       if (block.type === "news-image" && block.image) {
-        return { ...block, image: await toWebp(block.image) };
+        return {
+          ...block,
+          image: await toWebp(block.image, getAccessToken),
+        };
       }
       return block;
     }),

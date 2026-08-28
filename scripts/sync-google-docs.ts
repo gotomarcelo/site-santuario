@@ -1,15 +1,13 @@
-import { access } from "node:fs/promises";
-import { authenticate } from "@google-cloud/local-auth";
 import "dotenv/config";
 import { google } from "googleapis";
 import { parseGoogleDocument } from "./google-doc-parser";
+import { createGoogleAuth, getAuthAccessToken } from "./google-auth";
 import { materializePageImages, prepareImageDirectory } from "./image-assets";
 import { writeFragments, writeNews, writePages } from "./content-writer";
 import type { NewsItem } from "../src/lib/types";
 
 const documentId = process.env.GOOGLE_DOCUMENT_ID;
 const rootFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
-const credentialsPath = new URL("../credentials.json", import.meta.url);
 
 if (!documentId && !rootFolderId) {
   throw new Error(
@@ -17,22 +15,10 @@ if (!documentId && !rootFolderId) {
   );
 }
 
-try {
-  await access(credentialsPath);
-} catch {
-  throw new Error(
-    "Arquivo credentials.json não encontrado. Baixe o JSON do OAuth Client (tipo Desktop app) no Google Cloud e salve-o na raiz do projeto.",
-  );
-}
-
-const auth = await authenticate({
-  scopes: [
-    "https://www.googleapis.com/auth/documents.readonly",
-    "https://www.googleapis.com/auth/drive.readonly",
-  ],
-  keyfilePath: credentialsPath.pathname,
-});
+const auth = await createGoogleAuth();
 const docs = google.docs({ version: "v1", auth });
+const drive = google.drive({ version: "v3", auth });
+const getAccessToken = () => getAuthAccessToken(auth);
 
 function slugify(value: string): string {
   return value
@@ -45,15 +31,20 @@ function slugify(value: string): string {
 
 async function pageFromDocument(id: string) {
   const response = await docs.documents.get({ documentId: id });
-  return materializePageImages(parseGoogleDocument(response.data));
+  return materializePageImages(
+    parseGoogleDocument(response.data),
+    getAccessToken,
+  );
 }
 
 async function childrenOf(folderId: string) {
-  const response = await google.drive({ version: "v3", auth }).files.list({
+  const response = await drive.files.list({
     q: `'${folderId}' in parents and trashed = false`,
     fields: "files(id,name,mimeType,createdTime)",
     orderBy: "folder,name",
     pageSize: 1000,
+    supportsAllDrives: true,
+    includeItemsFromAllDrives: true,
   });
   return response.data.files ?? [];
 }
@@ -186,6 +177,11 @@ let news: NewsItem[] = [];
 await prepareImageDirectory();
 if (rootFolderId) {
   const rootChildren = await childrenOf(rootFolderId);
+  if (!rootChildren.length) {
+    console.warn(
+      "A pasta raiz do Drive está vazia ou a conta de serviço não tem acesso. Compartilhe a pasta com o e-mail da conta de serviço (Leitor).",
+    );
+  }
   const fragmentFolder = rootChildren.find(
     (file) =>
       file.mimeType === "application/vnd.google-apps.folder" &&
