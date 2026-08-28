@@ -18,7 +18,17 @@ O projeto está configurado para publicação como GitHub Pages em:
 https://gotomarcelo.github.io/site-santuario/
 ```
 
-O workflow em `.github/workflows/deploy.yml` executa automaticamente quando houver push na branch `main`. Ele instala as dependências, gera o conteúdo demo, executa o build e publica a pasta `dist`.
+O workflow em `.github/workflows/deploy.yml` executa automaticamente quando houver push na branch `main`. Ele instala as dependências, sincroniza o Drive com a conta de serviço, executa o build e publica a pasta `dist`.
+
+Secrets necessários em **Settings → Secrets and variables → Actions**:
+
+| Secret | Conteúdo |
+| ------ | -------- |
+| `GOOGLE_SERVICE_ACCOUNT_JSON` | JSON completo da chave da conta de serviço |
+| `GOOGLE_DRIVE_FOLDER_ID` | ID da pasta raiz no Drive (site multipágina) |
+| `GOOGLE_DOCUMENT_ID` | Só se o site for um único documento |
+
+Compartilhe a pasta (ou o documento) no Drive com o e-mail da conta de serviço, com permissão de **Leitor**. Sem esse compartilhamento a API não vê os arquivos.
 
 Para ativar a publicação no GitHub:
 
@@ -28,7 +38,7 @@ Para ativar a publicação no GitHub:
 4. Acompanhe a execução em **Actions → Deploy Astro to GitHub Pages**.
 5. Abra a URL exibida pelo workflow.
 
-O GitHub Pages usa o conteúdo demo. O comando `sync:google` continua sendo executado localmente, pois exige OAuth e `credentials.json`; depois de sincronizar, faça commit dos arquivos gerados e envie para a branch `main` para publicá-los.
+Para republicar sem push, use **Actions → Deploy Astro to GitHub Pages → Run workflow**.
 
 Abra `http://localhost:4321`. Ao editar as fixtures e rodar `npm run sync:demo`, o conteúdo em `src/content/pages/` é regenerado. O build de produção é validado com:
 
@@ -194,11 +204,27 @@ Em cada página, referencie o fragmento com:
 
 ## Conectar a um Google Doc real
 
-1. Crie um projeto no Google Cloud Console.
-2. Habilite **Google Docs API**.
-3. Em **Google Auth platform → Clients**, crie um cliente OAuth do tipo **Desktop app** e baixe o JSON.
-4. Salve o download como `credentials.json` na raiz do projeto. Esse arquivo é ignorado pelo Git.
-5. Crie um arquivo `.env` na raiz do projeto (ele não vai para o Git). Para um site de uma página, use:
+### Conta de serviço (GitHub Actions e sync sem navegador)
+
+1. No Google Cloud Console, habilite **Google Docs API** e **Google Drive API**.
+2. Crie uma conta de serviço (por exemplo `drive-santuario-github@poc-drive-505413.iam.gserviceaccount.com`).
+3. Gere uma chave JSON e **não** commite o arquivo.
+4. No Drive, compartilhe a pasta raiz (ou o documento) com o e-mail da conta de serviço, como **Leitor**.
+5. Localmente, salve a chave como `credentials.json` na raiz (já ignorado pelo Git) **ou** coloque o JSON em `GOOGLE_SERVICE_ACCOUNT_JSON` no `.env`.
+6. No GitHub, grave os secrets descritos na seção de GitHub Pages.
+
+O sincronizador detecta `type: "service_account"` e autentica sem abrir o navegador.
+
+### OAuth interativo (opcional, só local)
+
+1. Em **Google Auth platform → Clients**, crie um cliente OAuth do tipo **Desktop app** e baixe o JSON.
+2. Salve o download como `credentials.json` na raiz do projeto.
+
+Na primeira execução de `npm run sync:google` com esse arquivo, o navegador abre para consentir a leitura dos Docs e do Drive.
+
+### Variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto (ele não vai para o Git). Para um site de uma página, use:
 
 ```env
 GOOGLE_DOCUMENT_ID="id-do-documento"
@@ -212,18 +238,17 @@ GOOGLE_DRIVE_FOLDER_ID="id-da-pasta-raiz"
 
 Por exemplo, uma pasta `site` com um documento e as subpastas `quem-somos`, `noticias` e `agenda` gera `/`, `/quem-somos/`, `/noticias/` e `/agenda/`. Subpastas podem ser aninhadas. Os nomes são convertidos para slug e duas pastas irmãs não podem gerar o mesmo slug.
 
-6. No terminal, execute:
+No terminal, execute:
 
 ```bash
 npm run sync:google
 ```
 
-Na primeira execução, o navegador abre para você consentir com a leitura dos seus Google Docs e do Drive. O comando converte cada documento em JSON dentro de `src/content/pages/` e, em seguida, `npm run dev` ou `npm run build` gera uma rota estática para cada página.
+O comando converte cada documento em JSON dentro de `src/content/pages/` e, em seguida, `npm run dev` ou `npm run build` gera uma rota estática para cada página.
 
-> Para produção, use OAuth por cliente, criptografe os tokens e nunca exponha credenciais no navegador ou no Git.
+> Nunca exponha a chave da conta de serviço no Git nem no navegador.
 
 ## Próximas evoluções
 
 - Adicionar metadata, imagens do Drive e páginas de post.
 - Criar preview e publicação via Cloudflare Pages.
-- Registrar a configuração OAuth de cada cliente.
