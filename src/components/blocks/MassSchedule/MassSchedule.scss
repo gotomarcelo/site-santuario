@@ -3,6 +3,9 @@
 
 .mass-schedule {
   padding-block: $space-8;
+  max-width: $width;
+  margin-left: auto;
+  margin-right: auto;
 
   &__intro {
     max-width: 560px;

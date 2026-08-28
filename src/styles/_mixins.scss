@@ -1,7 +1,6 @@
 @use "tokens" as *;
 
 @mixin content-width($width: 1280px) {
-  max-width: $width;
   margin-inline: auto;
 }
 

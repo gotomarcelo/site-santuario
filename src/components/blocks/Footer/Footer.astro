@@ -18,94 +18,98 @@ const {
 } = Astro.props as FooterBlock;
 ---
 
-<footer class="site-footer">
+<footer class="footer-container">
   <div class="site-footer__background"></div>
-  <div class="site-footer__main">
-    <div class="site-footer__grid">
-      <section class="site-footer__brand">
-        <a
-          class="site-footer__brand-lockup"
-          href={siteUrl("/")}
-          aria-label={brand}
-        >
+  <div class="site-footer">
+    <div class="site-footer__main">
+      <div class="site-footer__grid">
+        <section class="site-footer__brand">
+          <a
+            class="site-footer__brand-lockup"
+            href={siteUrl("/")}
+            aria-label={brand}
+          >
+            {
+              logo ? (
+                <img class="site-footer__logo" src={siteUrl(logo)} alt="" />
+              ) : (
+                <span class="site-footer__mark" aria-hidden="true">
+                  <span />
+                </span>
+              )
+            }
+            <span><small>{eyebrow}</small><strong>{brand}</strong></span>
+          </a>
+          {description && <p>{description}</p>}
+          <nav class="site-footer__social" aria-label="Redes sociais">
+            {
+              contacts
+                .filter(
+                  (contact) => contact.icon && contact.icon.startsWith("@"),
+                )
+                .map((contact) => (
+                  <a href={contact.text} aria-label={contact.icon}>
+                    {contact.icon.replace("@", "")}
+                  </a>
+                ))
+            }
+          </nav>
+        </section>
+
+        <section class="site-footer__links">
+          <h2>Links Rápidos</h2>
+          <ul>
+            {
+              quickLinks.map((link) => (
+                <li>
+                  <a href={siteUrl(link.href)}>{link.label}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+        <section class="site-footer__links">
+          <h2>Sacramentos</h2>
+          <ul>
+            {
+              services.map((link) => (
+                <li>
+                  <a href={link.href}>{link.label}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section class="site-footer__contact">
+          <h2>Contato</h2>
+          <div class="site-footer__contact-list">
+            {
+              contacts
+                .filter((contact) => !contact.icon.startsWith("@"))
+                .map((contact) => (
+                  <p>
+                    <span aria-hidden="true">{contact.icon}</span>
+                    {contact.text}
+                  </p>
+                ))
+            }
+          </div>
           {
-            logo ? (
-              <img class="site-footer__logo" src={siteUrl(logo)} alt="" />
-            ) : (
-              <span class="site-footer__mark" aria-hidden="true">
-                <span />
-              </span>
+            officeLabel && (
+              <div class="site-footer__office">
+                <>
+                  <small>{officeLabel}</small>
+                  <p>{officeHours}</p>
+                </>
+              </div>
             )
           }
-          <span><small>{eyebrow}</small><strong>{brand}</strong></span>
-        </a>
-        {description && <p>{description}</p>}
-        <nav class="site-footer__social" aria-label="Redes sociais">
-          {
-            contacts
-              .filter((contact) => contact.icon && contact.icon.startsWith("@"))
-              .map((contact) => (
-                <a href={contact.text} aria-label={contact.icon}>
-                  {contact.icon.replace("@", "")}
-                </a>
-              ))
-          }
-        </nav>
-      </section>
-
-      <section class="site-footer__links">
-        <h2>Links Rápidos</h2>
-        <ul>
-          {
-            quickLinks.map((link) => (
-              <li>
-                <a href={siteUrl(link.href)}>{link.label}</a>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
-      <section class="site-footer__links">
-        <h2>Sacramentos</h2>
-        <ul>
-          {
-            services.map((link) => (
-              <li>
-                <a href={link.href}>{link.label}</a>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
-
-      <section class="site-footer__contact">
-        <h2>Contato</h2>
-        <div class="site-footer__contact-list">
-          {
-            contacts
-              .filter((contact) => !contact.icon.startsWith("@"))
-              .map((contact) => (
-                <p>
-                  <span aria-hidden="true">{contact.icon}</span>
-                  {contact.text}
-                </p>
-              ))
-          }
-        </div>
-        {
-          officeLabel && (
-            <div class="site-footer__office">
-              <>
-                <small>{officeLabel}</small>
-                <p>{officeHours}</p>
-              </>
-            </div>
-          )
-        }
-      </section>
+        </section>
+      </div>
     </div>
-  </div>
-  <div class="site-footer__legal">
-    <span>{copyright}</span><span>{diocese}</span>
+    <div class="site-footer__legal">
+      <span>{copyright}</span><span>{diocese}</span>
+    </div>
   </div>
 </footer>

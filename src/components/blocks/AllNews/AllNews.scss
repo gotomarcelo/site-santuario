@@ -2,11 +2,16 @@
 
 .all-news {
   padding-block: 80px;
-  margin: 0 $space-5;
+  max-width: $width;
+  margin-left: auto;
+  margin-right: auto;
+
   &__heading {
     max-width: 620px;
     margin-bottom: 48px;
     justify-self: center;
+    margin-left: $space-5;
+    margin-right: $space-5;
     p {
       text-align: center;
     }
@@ -49,6 +54,8 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
+    margin-left: $space-5;
+    margin-right: $space-5;
   }
   &__pagination {
     display: flex;

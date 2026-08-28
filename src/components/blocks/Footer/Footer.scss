@@ -1,27 +1,33 @@
 @use "../../../styles/tokens" as *;
 @use "../../../styles/mixins" as *;
 
-.site-footer {
-  color: $color-text-mid;
-  font-family: $font-sans;
-  margin: 0 $space-5;
+.footer-container {
   position: relative;
 
-  &__background {
+  .site-footer__background {
     position: absolute;
-    justify-self: center;
-    top: -3px;
-    width: 100vw;
-    height: calc(100% + 3px);
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-50%);
     z-index: -1;
     background: $color-cream-dark;
     border-top: 3px solid $color-gold;
   }
+}
+.site-footer {
+  color: $color-text-mid;
+  font-family: $font-sans;
+  max-width: $width;
+  margin-left: auto;
+  margin-right: auto;
 
   &__main {
     @include content-width(1280px);
     padding-top: 32px;
     padding-bottom: 32px;
+    margin-left: $space-5;
+    margin-right: $space-5;
   }
   &__grid {
     display: grid;

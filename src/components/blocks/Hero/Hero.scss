@@ -7,7 +7,10 @@
 
   overflow: hidden;
   background: $color-cream;
-  max-width: 1280px;
+
+  max-width: $width;
+  margin-left: auto;
+  margin-right: auto;
 
   &__content {
     position: relative;
